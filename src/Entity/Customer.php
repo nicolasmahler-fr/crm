@@ -135,9 +135,15 @@ class Customer
      */
     private $country;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Countdown::class, mappedBy="customer")
+     */
+    private $countdowns;
+
     public function __construct()
     {
         $this->invoices = new ArrayCollection();
+        $this->countdowns = new ArrayCollection();
     }
 
     /**
@@ -316,6 +322,36 @@ class Customer
     public function setCountry(?string $country): self
     {
         $this->country = $country;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Countdown[]
+     */
+    public function getCountdowns(): Collection
+    {
+        return $this->countdowns;
+    }
+
+    public function addCountdown(Countdown $countdown): self
+    {
+        if (!$this->countdowns->contains($countdown)) {
+            $this->countdowns[] = $countdown;
+            $countdown->setCustomer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCountdown(Countdown $countdown): self
+    {
+        if ($this->countdowns->removeElement($countdown)) {
+            // set the owning side to null (unless already changed)
+            if ($countdown->getCustomer() === $this) {
+                $countdown->setCustomer(null);
+            }
+        }
 
         return $this;
     }
