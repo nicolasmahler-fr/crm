@@ -27,6 +27,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AddInvoiceRowPage from './js/pages/AddInvoiceRowPage';
 import invoicePdf from './js/pages/pdf/InvoicePdf';
+import CountdownsPage from './js/pages/CountdownsPage';
 
 AuthApi.setup();
 
@@ -63,6 +64,7 @@ const App = () => {
                         <PrivateRoute path="/invoiceRows/:invoice/add" component={AddInvoiceRowPage} />
                         <PrivateRoute path="/invoices" component={InvoicesPage} />
                         <PrivateRoute path="/pdf/invoice/:id" component={invoicePdf} />
+                        <PrivateRoute path="/countdowns" component={CountdownsPage} />
                         <Route path="/" component={HomePage} />
                     </Switch>
                 </main>

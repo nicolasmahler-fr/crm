@@ -34,6 +34,9 @@ const Navbar = ({ history }) => {
         <li className="nav-item">
           <NavLink className="nav-link" to="/invoices">Factures</NavLink>
         </li>
+        <li className="nav-item">
+          <NavLink className="nav-link" to="/countdowns">Contrats de maintenance</NavLink>
+        </li>
       </ul>
           <ul className="navbar-nav mll-auto">
             {!isAuthenticated && <>

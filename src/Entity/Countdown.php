@@ -2,14 +2,20 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\CountdownRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\CountdownRepository;
+use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ * normalizationContext={
+ *   "groups"={"countdown_read"}
+ * }
+ * )
  * @ORM\Entity(repositoryClass=CountdownRepository::class)
  */
 class Countdown
@@ -18,26 +24,31 @@ class Countdown
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"countdown_read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"countdown_read"})
      */
     private $reference;
 
     /**
      * @ORM\Column(type="time")
+     * @Groups({"countdown_read"})
      */
     private $credit;
 
     /**
      * @ORM\ManyToOne(targetEntity=Customer::class, inversedBy="countdowns")
+     * @Groups({"countdown_read"})
      */
     private $customer;
 
     /**
      * @ORM\OneToMany(targetEntity=CountdownRow::class, mappedBy="countdown")
+     * @ApiSubresource
      */
     private $countdownRows;
 
