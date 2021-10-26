@@ -75,46 +75,55 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"customers_read", "invoices_read", "invoices_subresource", "users_read"})
      */
     private $address1;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"customers_read", "invoices_read", "invoices_subresource", "users_read"})
      */
     private $address2;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups({"customers_read", "invoices_read", "invoices_subresource", "users_read"})
      */
     private $postcode;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"customers_read", "invoices_read", "invoices_subresource", "users_read"})
      */
     private $city;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"customers_read", "invoices_read", "invoices_subresource", "users_read"})
      */
     private $country;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"customers_read", "invoices_read", "invoices_subresource", "users_read"})
      */
     private $website;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"customers_read", "invoices_read", "invoices_subresource", "users_read"})
      */
     private $siret;
 
     /**
      * @ORM\Column(type="bigint")
+     * @Groups({"customers_read", "invoices_read", "invoices_subresource", "users_read"})
      */
     private $rib;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"customers_read", "invoices_read", "invoices_subresource", "users_read"})
      */
     private $bic;
 

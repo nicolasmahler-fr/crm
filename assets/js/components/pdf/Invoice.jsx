@@ -19,6 +19,7 @@ const Invoice = ({ id }) => {
       amount: '',
       customer: '',
       sentAt: '',
+      user: '',
       invoiceRows: []
     });
 
@@ -27,8 +28,8 @@ const Invoice = ({ id }) => {
     //recup de la facture
     const fetchInvoice = async (id) => {
         try {
-            const {chrono, amount, customer, sentAt, invoiceRows} = await InvoicesAPI.find(id);
-          setInvoice({chrono, amount, customer, sentAt, invoiceRows});
+            const {chrono, amount, customer, sentAt, user, invoiceRows} = await InvoicesAPI.find(id);
+          setInvoice({chrono, amount, customer, sentAt, user, invoiceRows});
         } catch (error) {
             console.log(error.response);
             //history.replace('/invoices');
@@ -81,10 +82,19 @@ const Invoice = ({ id }) => {
         {invoice.customer.company}
         </Text>
         <Text style={Styles.clientAddress}>
-          Ground Floor, Washbrook House, Lancastrian Office Centre,
+          {invoice.customer.firstName} {invoice.customer.lastName}
         </Text>
         <Text style={Styles.clientAddress}>
-          Talbot Road, Manchester, M32 0FP. England
+          {invoice.customer.address1}
+        </Text>
+        <Text style={Styles.clientAddress}>
+          {invoice.customer.address2}
+        </Text>
+        <Text style={Styles.clientAddress}>
+          {invoice.customer.postcode} {invoice.customer.city}
+        </Text>
+        <Text style={Styles.clientAddress}>
+          {invoice.customer.country}
         </Text>
       </View>
     )
@@ -93,7 +103,7 @@ const Invoice = ({ id }) => {
   const createSendDate = () => {
     return (
       <Text style={Styles.date}>
-        Kirchheim, le {formatDate(invoice.sentAt)}
+        {invoice.user.city}, le {formatDate(invoice.sentAt)}
       </Text>
     )
   }
@@ -209,25 +219,25 @@ const Invoice = ({ id }) => {
           Paiement par chèque, ou virement bancaire sur le compte :
         </Text>
         <Text style={boldCenteredTxtStyle}>
-          Nicolas MAHLER
+          {invoice.user.firstName} {invoice.user.lastName}
         </Text>
         <Text style={boldCenteredTxtStyle}>
-          9 rue Saint Eloi
+          {invoice.user.address1}
         </Text>
         <Text style={boldCenteredTxtStyle}>
-          67520 Kirchheim
+          {invoice.user.postCode} {invoice.user.city}
         </Text>
         <Text style={boldCenteredTxtStyle}>
-          FRANCE
+          {invoice.user.country}
         </Text>
         <Text style={boldCenteredTxtStyle}>
-          RIB : 10278 01650 00020453202 25
+          RIB : {invoice.user.rib}
         </Text>
         <Text style={boldCenteredTxtStyle}>
           IBAN : FR76 1027 8016 5000 0204 5320 225
         </Text>
         <Text style={boldCenteredTxtStyle}>
-          BIC : CMCIFR2A
+          BIC : {invoice.user.bic}
         </Text>
       </View>
     )
@@ -237,8 +247,8 @@ const Invoice = ({ id }) => {
     return (
       <View>
         <Text style={contactOwnerStyle}>
-          Nicolas MAHLER - Développeur Web - 9 rue St Eloi - 67250 KIRCHHEIM - contact@nicolasmahler.fr - tel :(+33)07 81 71 87 55 - www.nicolasmahler.fr
-          SIRET: 514 327 063 00046
+          {invoice.user.firstName} {invoice.user.lastName} - Développeur Web - {invoice.user.address1} {invoice.user.lastName} - {invoice.user.postCode} {invoice.user.city} - {invoice.user.email} - tel :(+33)07 81 71 87 55 - {invoice.user.website} 
+           - SIRET: {invoice.user.siret}
         </Text>
       </View>
     )

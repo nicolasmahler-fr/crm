@@ -38,7 +38,16 @@ class AppFixtures extends Fixture
             $user->setFirstName($faker->firstName())
                 ->setLastName($faker->lastName)
                 ->setEmail($faker->email)
-                ->setPassword($hash);
+                ->setPassword($hash)
+                ->setAddress1($faker->address)
+                ->setAddress2($faker->address)
+                ->setPostcode($faker->randomNumber(5, false))
+                ->setCity($faker->city)
+                ->setCountry($faker->country)
+                ->setWebsite('https://www.' . $faker->domainName)
+                ->setSiret($faker->randomNumber(5, false))
+                ->setRib($faker->randomNumber(5, false))
+                ->setBic($faker->word);
 
             for ($c = 0; $c < 30; $c++) {
                 $customer = new Customer();
@@ -46,7 +55,12 @@ class AppFixtures extends Fixture
                     ->setLastName($faker->lastName)
                     ->setCompany($faker->company)
                     ->setEmail($faker->email)
-                    ->setUser($user);
+                    ->setUser($user)
+                    ->setAddress1($faker->address)
+                    ->setAddress2($faker->address)
+                    ->setPostcode($faker->randomNumber(5, false))
+                    ->setCity($faker->city)
+                    ->setCountry($faker->country);
 
                 $manager->persist($customer);
 
@@ -66,6 +80,7 @@ class AppFixtures extends Fixture
                         $row = new InvoiceRow();
                         $row->setDescription($faker->sentence($nbWords = 12, $variableNbWords = true))
                             ->setQuantity($faker->numberBetween(1, 16))
+                            ->setUnitPrice('50')
                             ->setAmount($row->getQuantity() * 50)
                             ->setInvoice($invoice);
 
