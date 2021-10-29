@@ -51,13 +51,13 @@ class Customer
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"customers_read", "invoices_read"})
+     * @Groups({"customers_read", "invoices_read", "countdown_read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"customers_read", "invoices_read"})
+     * @Groups({"customers_read", "invoices_read", "countdown_read"})
      * @Assert\NotBlank(message="Le prénom est obligatoire")
      * @Assert\Length(
      *      min=3, minMessage="Le prénom doit faire entre 3 caractères et 255 caractères",
@@ -68,7 +68,7 @@ class Customer
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"customers_read", "invoices_read"})
+     * @Groups({"customers_read", "invoices_read", "countdown_read"})
      * @Assert\NotBlank(message="Le nom de famille est obligatoire")
      * @Assert\Length(
      *      min=3, minMessage="Le nom de famille doit faire entre 3 caractères et 255 caractères",
@@ -79,7 +79,7 @@ class Customer
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"customers_read", "invoices_read"})
+     * @Groups({"customers_read", "invoices_read", "countdown_read"})
      * @Assert\NotBlank(message="L'email est obligatoire")
      * @Assert\Email(message="L'adresse email doit être valide")
      */
@@ -87,7 +87,7 @@ class Customer
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"customers_read", "invoices_read"})
+     * @Groups({"customers_read", "invoices_read", "countdown_read"})
      */
     private $company;
 
@@ -107,31 +107,31 @@ class Customer
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"customers_read", "invoices_read"})
+     * @Groups({"customers_read", "invoices_read", "countdown_read"})
      */
     private $address1;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"customers_read", "invoices_read"})
+     * @Groups({"customers_read", "invoices_read", "countdown_read"})
      */
     private $address2;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * @Groups({"customers_read", "invoices_read"})
+     * @Groups({"customers_read", "invoices_read", "countdown_read"})
      */
     private $postcode;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"customers_read", "invoices_read"})
+     * @Groups({"customers_read", "invoices_read", "countdown_read"})
      */
     private $city;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"customers_read", "invoices_read"})
+     * @Groups({"customers_read", "invoices_read", "countdown_read"})
      */
     private $country;
 

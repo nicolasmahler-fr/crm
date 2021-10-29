@@ -38,7 +38,7 @@ class InvoiceAmountSubscriber implements EventSubscriberInterface
             KernelEvents::VIEW => [
                 ['setInvoiceRowAmount', EventPriorities::PRE_VALIDATE],
                 ['setInvoiceAmount', EventPriorities::POST_WRITE],
-                ['updateAmountOnDelete', EventPriorities::POST_WRITE]
+                ['updateAmountOnDelete', EventPriorities::PRE_WRITE]
             ]
         ];
     }
@@ -94,10 +94,13 @@ class InvoiceAmountSubscriber implements EventSubscriberInterface
     public function updateAmountOnDelete(ViewEvent $event)
     {
 
-        if ($event->getRequest()->getMethod() === "DELETE") {
+        $row = $event->getControllerResult();
+
+        if ($row instanceof InvoiceRow && ($event->getRequest()->getMethod() === "DELETE")) {
 
             //Récupération de l'entité supprimée.
             $data = $event->getRequest()->get('data');
+
 
             //Export de la somme de la row supprimée
             $rowAmount = $data->getAmount();
@@ -118,9 +121,6 @@ class InvoiceAmountSubscriber implements EventSubscriberInterface
             $manager = $this->entityManager;
             $manager->persist($invoice);
             $manager->flush();
-
-            //Update de la facture
-
         }
     }
 }

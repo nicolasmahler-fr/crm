@@ -2,13 +2,33 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\CountdownRowRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\CountdownRowRepository;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ApiResource()
  * @ORM\Entity(repositoryClass=CountdownRowRepository::class)
+ * @ApiResource(
+ *  collectionOperations={"GET", "POST"},
+ *  subresourceOperations={
+ *      "countdownRows_get_subresource"={
+ *          "normalization_context"={"groups"={"countdownRows_subresource"}}
+ *     }
+ *  },
+ *  itemOperations={
+ *      "GET", 
+ *      "PUT", 
+ *      "DELETE"
+ *  },
+ *  normalizationContext={
+ *       "groups"={"countdownRows_read"}
+ *   },
+ *   denormalizationContext={
+ *      "disable_type_enforcement"=true
+ * }
+ * )
  */
 class CountdownRow
 {
@@ -16,26 +36,33 @@ class CountdownRow
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"countdownRows_read", "countdowns_read", "countdowns_subresource", "countdownRows_subresource"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"countdownRows_read", "countdowns_read", "countdowns_subresource", "countdownRows_subresource"})
+     * @Assert\Type(type="\DateTimeInterface", message="La date doit être au format YYYY-MM-DD")
      */
     private $date;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"countdownRows_read", "countdowns_read", "countdowns_subresource", "countdownRows_subresource"})
      */
     private $task;
 
     /**
-     * @ORM\Column(type="time")
+     * @ORM\Column(type="string", length=5)
+     * @Groups({"countdownRows_read", "countdowns_read", "countdowns_subresource", "countdownRows_subresource"})
      */
     private $elapsed;
 
     /**
+     * @Groups({"countdownRows_read"})
      * @ORM\ManyToOne(targetEntity=Countdown::class, inversedBy="countdownRows")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $countdown;
 
@@ -68,12 +95,12 @@ class CountdownRow
         return $this;
     }
 
-    public function getElapsed(): ?\DateTimeInterface
+    public function getElapsed(): ?string
     {
         return $this->elapsed;
     }
 
-    public function setElapsed(\DateTimeInterface $elapsed): self
+    public function setElapsed(string $elapsed): self
     {
         $this->elapsed = $elapsed;
 

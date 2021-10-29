@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\JoinColumn;
 use App\Repository\InvoiceRepository;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use Doctrine\Common\Collections\Collection;

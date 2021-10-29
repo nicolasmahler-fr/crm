@@ -11,12 +11,25 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
+ * @ORM\Entity(repositoryClass=CountdownRepository::class)
  * @ApiResource(
+ * subresourceOperations={
+ *      "api_customers_countdowns_get_subresource"={
+ *          "normalization_context"={"groups"={"countdowns_subresource"}}
+ *      }
+ * },
+ * itemOperations={
+ *      "GET", 
+ *      "PUT", 
+ *      "DELETE"
+ * },
  * normalizationContext={
  *   "groups"={"countdown_read"}
+ * },
+ * denormalizationContext={
+ *      "disable_type_enforcement"=true
  * }
  * )
- * @ORM\Entity(repositoryClass=CountdownRepository::class)
  */
 class Countdown
 {
@@ -24,19 +37,19 @@ class Countdown
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"countdown_read"})
+     * @Groups({"countdown_read", "customers_read", "countdowns_subresource", "countdownRows_read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"countdown_read"})
+     * @Groups({"countdown_read", "customers_read", "countdowns_subresource", "countdownRows_read"})
      */
     private $reference;
 
     /**
-     * @ORM\Column(type="time")
-     * @Groups({"countdown_read"})
+     * @ORM\Column(type="string", length=255)
+     * @Groups({"countdown_read", "customers_read", "countdowns_subresource", "countdownRows_read"})
      */
     private $credit;
 
@@ -51,6 +64,24 @@ class Countdown
      * @ApiSubresource
      */
     private $countdownRows;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"countdown_read", "customers_read", "countdowns_subresource", "countdownRows_read"})
+     */
+    private $currentCredit;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"countdown_read", "customers_read", "countdowns_subresource", "countdownRows_read"})
+     */
+    private $status;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     * @Groups({"countdown_read", "customers_read", "countdowns_subresource", "countdownRows_read"})
+     */
+    private $date;
 
     public function __construct()
     {
@@ -74,12 +105,12 @@ class Countdown
         return $this;
     }
 
-    public function getCredit(): ?\DateTimeInterface
+    public function getCredit(): ?string
     {
         return $this->credit;
     }
 
-    public function setCredit(\DateTimeInterface $credit): self
+    public function setCredit(string $credit): self
     {
         $this->credit = $credit;
 
@@ -100,6 +131,7 @@ class Countdown
 
     /**
      * @return Collection|CountdownRow[]
+     * @Groups({"countdowns_read", "countdowns_subresource"})
      */
     public function getCountdownRows(): Collection
     {
@@ -124,6 +156,42 @@ class Countdown
                 $countdownRow->setCountdown(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCurrentCredit(): ?string
+    {
+        return $this->currentCredit;
+    }
+
+    public function setCurrentCredit(?string $currentCredit): self
+    {
+        $this->currentCredit = $currentCredit;
+
+        return $this;
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(?string $status): self
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    public function getDate(): ?\DateTimeInterface
+    {
+        return $this->date;
+    }
+
+    public function setDate(\DateTimeInterface $date): self
+    {
+        $this->date = $date;
 
         return $this;
     }

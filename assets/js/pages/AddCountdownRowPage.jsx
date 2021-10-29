@@ -1,24 +1,24 @@
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import Field from '../components/forms/Field';
-import InvoicesAPI from '../services/InvoicesAPI';
+import CountdownsApi from '../services/CountdownsApi';
 
-const AddrowPage = ({history, match}) => {
+const AddCountdownRowPage = ({history, match}) => {
 
-    const { invoice } = match.params;
+    const { countdown } = match.params;
 
     const [row, setRow] = useState({
-        description: '',
-        quantity: '',
-        unitPrice: 50,
-        invoice: invoice
+        date: '',
+        task: '',
+        elapsed: '00:00',
+        countdown: countdown
     });
 
     const [errors, setErrors] = useState({
-        description: '',
-        quantity: '',
-        unitPrice: '',
-        invoice: ''
+       date: '',
+       task: '',
+       elapsed: '',
+       countdown: ''
     })
 
     const handleChange = ({ currentTarget }) => {
@@ -31,11 +31,10 @@ const AddrowPage = ({history, match}) => {
         event.preventDefault();
         
         try {
-            console.log(row)
-            await InvoicesAPI.createRow(row);
-            toast.success('L\'entrée de la facture a bien été ajoutée.');
-            history.replace('/invoices/' + row.invoice);
-       } catch ({ response }) {
+            await CountdownsApi.createRow(row)
+            toast.success('L\'entrée du contrat a bien été ajoutée.');
+            history.replace('/countdowns/' + row.countdown);
+        } catch ({ response }) {
             const { violations } = response.data;
             if (violations) {
                 const apiErrors = {};
@@ -52,34 +51,34 @@ const AddrowPage = ({history, match}) => {
 
     return (
         <>
-            <h1>Créer une entrée pour la facture n° : {invoice}</h1>
+            <h1>Créer une entrée pour le contrat n° : {countdown}</h1>
             <form onSubmit={handleSubmit}>
                <Field
-                    name="description"
+                    name="date"
                     type="text"
-                    placeholder="Description de la tâche"
-                    label="Description de la tâche"
+                    placeholder="Date de la tâche"
+                    label="Date de la tâche"
                     onChange={handleChange}
-                    value={row.description}
-                    error={errors.description}
+                    value={row.date}
+                    error={errors.date}
                 />
                 <Field
-                    name="quantity"
-                    type="number"
-                    placeholder="Quantité"
-                    label="Quantité"
+                    name="task"
+                    type="text"
+                    placeholder="Description"
+                    label="Description"
                     onChange={handleChange}
-                    value={row.quantity}
-                    error={errors.quantity}
+                    value={row.task}
+                    error={errors.task}
                 />
                 <Field
-                    name="unitPrice"
-                    type="number"
-                    placeholder="Prix unitaire"
-                    label="Prix unitaire"
+                    name="elapsed"
+                    type="text"
+                    placeholder="Temps consommé"
+                    label="Temps consommé (hh:mm)"
                     onChange={handleChange}
-                    value={row.unitPrice}
-                    error={errors.unitPrice}
+                    value={row.elapsed}
+                    error={errors.elapsed}
                 />
 
                 <div className="form-group mt-3">
@@ -90,4 +89,4 @@ const AddrowPage = ({history, match}) => {
      );
 }
  
-export default AddrowPage   ;
+export default AddCountdownRowPage;

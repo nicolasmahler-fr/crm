@@ -11,6 +11,7 @@ const InvoicePage = ({ history, match }) => { //On extrait history et match des 
 
     const { id = "new" } = match.params;
 
+    console.log(Date.now())
     const [invoice, setInvoice] = useState({
         amount: '',
         customer: '',
