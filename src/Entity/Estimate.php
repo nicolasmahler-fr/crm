@@ -3,12 +3,12 @@
 namespace App\Entity;
 
 use App\Entity\User;
-use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\InvoiceRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinColumn;
+use App\Repository\EstimateRepository;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -16,11 +16,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 
 /**
- * @ORM\Entity(repositoryClass=InvoiceRepository::class)
+ * @ORM\Entity(repositoryClass=EstimateRepository::class)
  * @ApiResource(
  * subresourceOperations={
- *      "api_customers_invoices_get_subresource"={
- *          "normalization_context"={"groups"={"invoices_subresource"}}
+ *      "api_customers_estimates_get_subresource"={
+ *          "normalization_context"={"groups"={"estimates_subresource"}}
  *      }
  * },
  * itemOperations={
@@ -29,11 +29,11 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
  *      "DELETE", 
  *      "increment"={
  *          "method"="post", 
- *          "path"="/invoices/{id}/increment", 
- *          "controller"="App\Controller\InvoiceIncrementationController",
+ *          "path"="/estimates/{id}/increment", 
+ *          "controller"="App\Controller\EstimateIncrementationController",
  *          "openapi_context"={
- *              "summary"="Incrémente une facture",
- *              "description"="Incrémente le chrono d'une facture donnée"
+ *              "summary"="Incrémente un devis",
+ *              "description"="Incrémente le chrono d'un devis donné"
  *          }
  *      }
  * },
@@ -43,7 +43,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
         "order": {"chrono":"desc"}
  *  },
  *  normalizationContext={
- *      "groups"={"invoices_read"}
+ *      "groups"={"estimates_read"}
  * },
  * denormalizationContext={
  *      "disable_type_enforcement"=true
@@ -53,27 +53,27 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
  *  OrderFilter::class, properties={"amount", "sentAt"}
  * )
  */
-class Invoice
+class Estimate
 {
     /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
+     * @ORM\Id
+     * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"invoices_read", "customers_read", "invoices_subresource", "invoiceRows_read"})
+     * @Groups({"estimates_read", "customers_read", "estimates_subresource", "estimateRows_read"})
      */
     private $id;
 
     /**
-     * @ORM\Column(type="float")
-     * @Groups({"invoices_read", "customers_read", "invoices_subresource", "invoiceRows_read"})
+     * @ORM\Column(type="float", nullable=true)
+     * @Groups({"estimates_read", "customers_read", "estimates_subresource", "estimateRows_read"})
      * @Assert\NotBlank(message="Le montant est obligatoire")
-     * @Assert\Type(type="numeric", message="Le montant de la facture doit être numérique")
+     * @Assert\Type(type="numeric", message="Le montant du devis doit être numérique")
      */
     private $amount;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"invoices_read", "customers_read", "invoices_subresource"})
+     * @Groups({"estimates_read", "customers_read", "estimates_subresource"})
      * @Assert\Type(type="\DateTimeInterface", message="La date doit être au format YYYY-MM-DD")
      * @Assert\NotBlank(message="La date d'envoi doit être renseignée")
      */
@@ -81,23 +81,23 @@ class Invoice
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"invoices_read", "customers_read", "invoices_subresource"})
+     * @Groups({"estimates_read", "customers_read", "estimates_subresource"})
      * @Assert\NotBlank(message="Le status doit être renseignée")
-     * @Assert\Choice(choices={"SENT", "PAID", "CANCELLED"}, message="Le status doit être SENT, PAID ou CANCELLED")
+     * @Assert\Choice(choices={"PENDING", "VALIDATE", "CANCELLED"}, message="Le status doit être SENT, PAID ou CANCELLED")
      */
     private $status;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Customer::class, inversedBy="invoices")
+     * @ORM\ManyToOne(targetEntity=Customer::class, inversedBy="estimates")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"invoices_read"})
-     * @Assert\NotBlank(message="Le client de la facture doit être renseigné")
+     * @Groups({"estimates_read"})
+     * @Assert\NotBlank(message="Le client du devis doit être renseigné")
      */
     private $customer;
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"invoices_read", "customers_read", "invoices_subresource"})
+     * @Groups({"estimates_read", "customers_read", "estimates_subresource"})
      * @Assert\NotBlank(message="Le chrono doit être renseigné")
      * @Assert\Type(type="integer", message="Le chrono doit être un nombre")
      */
@@ -105,27 +105,20 @@ class Invoice
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"invoices_read", "customers_read", "invoices_subresource"})
+     * @Groups({"estimates_read", "customers_read", "estimates_subresource"})
      * @Assert\NotBlank(message="L'année doit être renseigné")
      */
     private $year;
 
     /**
-     * @ORM\OneToMany(targetEntity=InvoiceRow::class, mappedBy="invoice")
+     * @ORM\OneToMany(targetEntity=EstimateRow::class, mappedBy="estimate")
      * @ApiSubresource
      */
-    private $invoiceRows;
-
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     * @Groups({"invoices_read", "customers_read", "invoices_subresource"})
-     * @Assert\Type(type="\DateTimeInterface", message="La date doit être au format YYYY-MM-DD")
-     */
-    private $paidAt;
+    private $estimateRows;
 
     public function __construct()
     {
-        $this->invoiceRows = new ArrayCollection();
+        $this->estimateRows = new ArrayCollection();
     }
 
     /**
@@ -148,7 +141,7 @@ class Invoice
         return $this->amount;
     }
 
-    public function setAmount($amount): self
+    public function setAmount(?float $amount): self
     {
         $this->amount = $amount;
 
@@ -160,7 +153,7 @@ class Invoice
         return $this->sentAt;
     }
 
-    public function setSentAt($sentAt): self
+    public function setSentAt(\DateTimeInterface $sentAt): self
     {
         $this->sentAt = $sentAt;
 
@@ -196,7 +189,7 @@ class Invoice
         return $this->chrono;
     }
 
-    public function setChrono($chrono): self
+    public function setChrono(int $chrono): self
     {
         $this->chrono = $chrono;
 
@@ -208,7 +201,7 @@ class Invoice
         return $this->year;
     }
 
-    public function setYear($year): self
+    public function setYear(string $year): self
     {
         $this->year = $year;
 
@@ -216,44 +209,32 @@ class Invoice
     }
 
     /**
-     * @return Collection|InvoiceRow[]
-     * @Groups({"invoices_read", "invoices_subresource"})
+     * @return Collection|EstimateRow[]
+     * @Groups({"estimates_read", "estimates_subresource"})
      */
-    public function getInvoiceRows(): Collection
+    public function getEstimateRows(): Collection
     {
-        return $this->invoiceRows;
+        return $this->estimateRows;
     }
 
-    public function addInvoiceRow(InvoiceRow $invoiceRow): self
+    public function addEstimateRow(EstimateRow $estimateRow): self
     {
-        if (!$this->invoiceRows->contains($invoiceRow)) {
-            $this->invoiceRows[] = $invoiceRow;
-            $invoiceRow->setInvoice($this);
+        if (!$this->estimateRows->contains($estimateRow)) {
+            $this->estimateRows[] = $estimateRow;
+            $estimateRow->setEstimate($this);
         }
 
         return $this;
     }
 
-    public function removeInvoiceRow(InvoiceRow $invoiceRow): self
+    public function removeEstimateRow(EstimateRow $estimateRow): self
     {
-        if ($this->invoiceRows->removeElement($invoiceRow)) {
+        if ($this->estimateRows->removeElement($estimateRow)) {
             // set the owning side to null (unless already changed)
-            if ($invoiceRow->getInvoice() === $this) {
-                $invoiceRow->setInvoice(null);
+            if ($estimateRow->getEstimate() === $this) {
+                $estimateRow->setEstimate(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getPaidAt(): ?\DateTimeInterface
-    {
-        return $this->paidAt;
-    }
-
-    public function setPaidAt(\DateTimeInterface $paidAt): self
-    {
-        $this->paidAt = $paidAt;
 
         return $this;
     }

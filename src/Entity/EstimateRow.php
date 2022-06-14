@@ -3,20 +3,20 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\InvoiceRowRepository;
+use App\Repository\EstimateRowRepository;
 use Doctrine\ORM\Mapping as ORM;
-use App\Entity\Invoice;
+use App\Entity\Estimate;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity(repositoryClass=InvoiceRowRepository::class)
+ * @ORM\Entity(repositoryClass=EstimateRowRepository::class)
  * @ApiResource(
  *  collectionOperations={"GET", "POST"},
  *  subresourceOperations={
- *      "invoiceRows_get_subresource"={
- *          "normalization_context"={"groups"={"invoiceRows_subresource"}}
+ *      "estimateRows_get_subresource"={
+ *          "normalization_context"={"groups"={"estimateRows_subresource"}}
  *     }
  *  },
  *  itemOperations={
@@ -25,55 +25,53 @@ use Symfony\Component\Validator\Constraints as Assert;
  *      "DELETE"
  *  },
  *  normalizationContext={
- *       "groups"={"invoiceRows_read"}
+ *       "groups"={"estimateRows_read"}
  *   },
  *   denormalizationContext={
  *      "disable_type_enforcement"=true
  * }
  * )
  */
-class InvoiceRow
+class EstimateRow
 {
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"invoiceRows_read", "invoices_read", "invoices_subresource", "invoiceRows_subresource"})
+     * @Groups({"estimateRows_read", "estimates_read", "estimates_subresource", "estimateRows_subresource"})
      */
     private $id;
 
     /**
-     * @ORM\Column(type="text")
-     * @Groups({"invoiceRows_read", "invoices_read", "invoices_subresource", "invoiceRows_subresource"})
+     * @ORM\Column(type="text", nullable=true)
+     * @Groups({"estimateRows_read", "estimates_read", "estimates_subresource", "estimateRows_subresource"})
+     * @Assert\NotBlank(message="La quantité est obligatoire")
+     * @Assert\Type(type="numeric", message="La quantité doit être numérique")
      */
     private $description;
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"invoiceRows_read", "invoices_read", "invoices_subresource", "invoiceRows_subresource"})
-     * @Assert\NotBlank(message="La quantité est obligatoire")
-     * @Assert\Type(type="numeric", message="La quantité doit être numérique")
      */
     private $quantity;
 
     /**
      * @ORM\Column(type="float")
-     * @Groups({"invoiceRows_read", "invoices_read", "invoices_subresource", "invoiceRows_subresource"})
+     * @Groups({"estimateRows_read", "estimates_read", "estimates_subresource", "estimateRows_subresource"})
      * @Assert\NotBlank(message="Le montant est obligatoire")
-     * @Assert\Type(type="numeric", message="Le montant de la facture doit être numérique")
+     * @Assert\Type(type="numeric", message="Le montant du devis doit être numérique")
      */
     private $amount;
 
     /**
-     * @Groups({"invoiceRows_read"})
-     * @ORM\ManyToOne(targetEntity=Invoice::class, inversedBy="invoiceRows")
+     * @ORM\ManyToOne(targetEntity=Estimate::class, inversedBy="estimateRows")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $invoice;
+    private $estimate;
 
     /**
      * @ORM\Column(type="float")
-     * @Groups({"invoiceRows_read", "invoices_read", "invoices_subresource", "invoiceRows_subresource"})
+     * @Groups({"estimateRows_read", "estimates_read", "estimates_subresource", "estimateRows_subresource"})
      * @Assert\NotBlank(message="Le prix unitaire est obligatoire")
      * @Assert\Type(type="numeric", message="Le prix unitaire doit être numérique")
      */
@@ -89,7 +87,7 @@ class InvoiceRow
         return $this->description;
     }
 
-    public function setDescription(string $description): self
+    public function setDescription(?string $description): self
     {
         $this->description = $description;
 
@@ -120,14 +118,14 @@ class InvoiceRow
         return $this;
     }
 
-    public function getInvoice(): ?Invoice
+    public function getEstimate(): ?Estimate
     {
-        return $this->invoice;
+        return $this->estimate;
     }
 
-    public function setInvoice(?Invoice $invoice): self
+    public function setEstimate(?Estimate $estimate): self
     {
-        $this->invoice = $invoice;
+        $this->estimate = $estimate;
 
         return $this;
     }

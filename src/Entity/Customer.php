@@ -31,7 +31,10 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *  },
  *  normalizationContext={
  *      "groups"={"customers_read"}
- *  }
+ *  },
+ *denormalizationContext={
+ *      "disable_type_enforcement"=true
+ * }
  * )
  * @ApiFilter(
  *  SearchFilter::class, properties={
@@ -120,6 +123,7 @@ class Customer
     /**
      * @ORM\Column(type="integer", nullable=true)
      * @Groups({"customers_read", "invoices_read", "countdown_read"})
+     * @Assert\Type(type="numeric", message="Le code postal doit être numérique")
      */
     private $postcode;
 
@@ -140,10 +144,16 @@ class Customer
      */
     private $countdowns;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Estimate::class, mappedBy="customer")
+     */
+    private $estimates;
+
     public function __construct()
     {
         $this->invoices = new ArrayCollection();
         $this->countdowns = new ArrayCollection();
+        $this->estimates = new ArrayCollection();
     }
 
     /**
@@ -297,7 +307,7 @@ class Customer
 
     public function setPostcode(?int $postcode): self
     {
-        $this->postcode = $postcode;
+        $this->postcode = (int)$postcode;
 
         return $this;
     }
@@ -350,6 +360,36 @@ class Customer
             // set the owning side to null (unless already changed)
             if ($countdown->getCustomer() === $this) {
                 $countdown->setCustomer(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Estimate[]
+     */
+    public function getEstimates(): Collection
+    {
+        return $this->estimates;
+    }
+
+    public function addEstimate(Estimate $estimate): self
+    {
+        if (!$this->estimates->contains($estimate)) {
+            $this->estimates[] = $estimate;
+            $estimate->setCustomer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEstimate(Estimate $estimate): self
+    {
+        if ($this->estimates->removeElement($estimate)) {
+            // set the owning side to null (unless already changed)
+            if ($estimate->getCustomer() === $this) {
+                $estimate->setCustomer(null);
             }
         }
 

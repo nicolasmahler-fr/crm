@@ -5,6 +5,9 @@ import { toast } from 'react-toastify';
 import Field from '../components/forms/Field';
 import FormContentLoader from '../components/loaders/FormContentLoader';
 import CountdownsApi from '../services/CountdownsApi';
+import DatePicker from "react-datepicker";
+import { registerLocale, setDefaultLocale } from "react-datepicker";
+import fr from 'date-fns/locale/fr';
 
 const CountdownRowPage = ({ history, match }) => { //On extrait history et match des props
 
@@ -12,6 +15,8 @@ const CountdownRowPage = ({ history, match }) => { //On extrait history et match
     
     //Id de la facture
     const [countdown, setCountdown] = useState([]);
+
+    registerLocale('fr', fr)
 
     //Données de la facture (rows)
     const [countdownRow, setcountdownRow] = useState({
@@ -121,20 +126,12 @@ const CountdownRowPage = ({ history, match }) => { //On extrait history et match
             
             {loading && <FormContentLoader />}
             {!loading && <form onSubmit={handleSubmit}>
-                <Field
-                    name="date"
-                    type="text"
-                    placeholder="Date de la tâche"
-                    label="Date de la tâche"
-                    onChange={handleChange}
-                    value={countdownRow.date}
-                    error={errors.date}
-                />
+                <DatePicker locale="fr" dateFormat="dd/MM/yyyy" value={countdownRow.date} error={errors.date} name="date" id="date" onChange={(value) => setcountdownRow({ ...countdownRow, date: value })}/>
                 <Field
                     name="task"
                     type="text"
                     placeholder="Description"
-                    label="Description"
+                    label="Descriptioncc"
                     onChange={handleChange}
                     value={countdownRow.task}
                     error={errors.task}

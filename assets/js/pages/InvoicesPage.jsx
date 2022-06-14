@@ -83,6 +83,8 @@ const InvoicesPage = (props) => {
             i.amount.toString().startsWith(search.toLowerCase())
             ||
             STATUS_LABELS[i.status].toLowerCase().includes(search.toLowerCase())
+            ||
+            i.chrono.toString().startsWith(search.toLowerCase())
     );
 
     //pagination des données
@@ -92,7 +94,6 @@ const InvoicesPage = (props) => {
         itemsPerPage
     );
 
-    console.log(invoices);
 
     return (<>
         <div className=" mb-3 d-flex justify-content-between align-items-center">
@@ -112,6 +113,7 @@ const InvoicesPage = (props) => {
                     <th>Numéro</th>
                     <th>Client</th>
                     <th>Date d'envoi</th>
+                    <th>Date de paiement</th>
                     <th className="text-center">Statut</th>
                     <th className="text-center">Montant</th>
                     <th></th>
@@ -119,13 +121,15 @@ const InvoicesPage = (props) => {
             </thead>
             {!loading && <tbody>
                 {paginatedInvoices.map(invoice => <tr key={invoice.id}>
-                    <td>{invoice.chrono}</td>
+                    <td>{invoice.year}{invoice.chrono}</td>
                     <td>
                         <Link to={"/customers/" + invoice.customer.id}>
-                            {invoice.customer.firstName} {invoice.customer.lastName}
+                            {invoice.customer.company}
                         </Link>
                     </td>
                     <td>{formatDate(invoice.sentAt)}</td>
+                    <td>{formatDate(invoice.paidAt)}</td>
+                    
                     <td className="text-center">
                         <span className={"badge badge-" + STATUS_CLASSES[invoice.status]}>
                             {STATUS_LABELS[invoice.status]}
@@ -133,8 +137,8 @@ const InvoicesPage = (props) => {
                     </td>
                     <td className="text-center">{invoice.amount.toLocaleString()} €</td>
                     <td>
-                        <Link to={'/invoices/' + invoice.id} className="btn btn-sm btn-primary">Editer</Link>
-                        <button className="btn btn-sm btn-danger" onClick={() => handleDelete(invoice.id)}>Supprimer</button>
+                        <Link to={'/invoices/' + invoice.id} className="btn btn-sm btn-primary">Voir / Editer</Link>
+                        {/* <button className="btn btn-sm btn-danger" onClick={() => handleDelete(invoice.id)}>Supprimer</button> */}
                     </td>
                 </tr>
                 )}

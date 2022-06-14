@@ -1,13 +1,3 @@
-/*
- * Welcome to your app's main JavaScript file!
- *
- * We recommend including the built version of this JavaScript file
- * (and its CSS file) in your base layout (base.html.twig).
- */
-
-// any CSS you import will output into a single css file (app.css in this case)
-import './styles/app.css';
-
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import Navbar from './js/components/Navbar';
@@ -24,6 +14,8 @@ import InvoicePage from './js/pages/InvoicePage';
 import InvoiceRowPage from './js/pages/InvoiceRowPage';
 import RegisterPage from './js/pages/RegisterPage';
 import { toast, ToastContainer } from 'react-toastify';
+import 'react-datepicker/dist/react-datepicker-cssmodules.css';
+import "react-datepicker/dist/react-datepicker.css";
 import 'react-toastify/dist/ReactToastify.css';
 import AddInvoiceRowPage from './js/pages/AddInvoiceRowPage';
 import invoicePdf from './js/pages/pdf/InvoicePdf';
@@ -32,6 +24,7 @@ import CountdownPage from './js/pages/CountdownPage';
 import CountdownRowPage from './js/pages/CountdownRowPage';
 import AddCountdownRowPage from './js/pages/AddCountdownRowPage';
 
+import './styles/app.css';
 AuthApi.setup();
 
 

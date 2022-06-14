@@ -13,14 +13,24 @@ const CustomerPage = ({match, history}) => {
         lastName:   '',
         firstName:  '',
         email :     '',
-        company :   ''
+        company :   '',
+        address1 : '',
+        address2 : '',
+        postcode : '',
+        city : '',
+        country: '',
     });
 
     const [errors, setErrors] = useState({
         lastName:   '',
         firstName:  '',
         email :     "",
-        company :   ""
+        company :   "",
+        address1 : '',
+        address2 : '',
+        postcode : '',
+        city : '',
+        country: '',
     })
 
     const [loading, setLoading] = useState(false);
@@ -30,8 +40,8 @@ const CustomerPage = ({match, history}) => {
     // recuperation du customer en fonction de l'id
     const fetchCustomer = async id => {
         try {
-            const { firstName, lastName, email, company } = await CustomersAPI.findCached(id);
-            setCustomer({ firstName, lastName, email, company });
+            const { firstName, lastName, email, company, address1, address2, postcode, city, country } = await CustomersAPI.findCached(id);
+            setCustomer({ firstName, lastName, email, company, address1, address2, postcode, city, country });
             setLoading(false);
         } catch (error) {
             toast.error("Le client n'a pas pu être chargé.");
@@ -127,6 +137,53 @@ const CustomerPage = ({match, history}) => {
                     onChange={handleChange}
                     error={errors.company}
                 />
+
+                <Field
+                    name="address1"
+                    label='Adresse 1'
+                    placeholder='n° et nom de la rue'
+                    value={customer.address1}
+                    onChange={handleChange}
+                    error={errors.address1}
+                />
+
+                <Field
+                    name="address2"
+                    label='Adresse 2'
+                    placeholder='Appartement, étage...'
+                    value={customer.address2}
+                    onChange={handleChange}
+                    error={errors.address2}
+                />
+
+                <Field
+                    name="postcode"
+                    type="number"
+                    placeholder="Code postal"
+                    label="code postal"
+                    onChange={handleChange}
+                    value={customer.postcode}
+                    error={errors.postcode}
+                />
+
+                <Field
+                    name="city"
+                    label='Ville'
+                    placeholder='Ville'
+                    value={customer.city}
+                    onChange={handleChange}
+                    error={errors.city}
+                />
+
+                <Field
+                    name="country"
+                    label='Pays'
+                    placeholder='Pays'
+                    value={customer.country}
+                    onChange={handleChange}
+                    error={errors.country}
+                />
+
 
                 <div className="form-group mt-3">
                     <button type="submit" className='btn btn-success'>Enregistrer</button>

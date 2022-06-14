@@ -263,7 +263,7 @@ const CountdownPage = ({ history, match }) => {
             </thead>
                 <tbody>
                     {rows.map(row => <tr key={row.id}>
-                    <td>{row.date}</td>
+                        <td>{formatDate(row.date)}</td>
                     <td>{row.task}</td>
                     <td className="text-center">
                        {row.elapsed}

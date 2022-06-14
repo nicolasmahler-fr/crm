@@ -2,13 +2,19 @@ import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import Field from '../components/forms/Field';
 import CountdownsApi from '../services/CountdownsApi';
+import DatePicker from "react-datepicker";
+import { registerLocale, setDefaultLocale } from "react-datepicker";
+import fr from 'date-fns/locale/fr';
+
 
 const AddCountdownRowPage = ({history, match}) => {
 
     const { countdown } = match.params;
 
+    registerLocale('fr', fr)
+
     const [row, setRow] = useState({
-        date: '',
+        date: new Date(),
         task: '',
         elapsed: '00:00',
         countdown: countdown
@@ -22,7 +28,11 @@ const AddCountdownRowPage = ({history, match}) => {
     })
 
     const handleChange = ({ currentTarget }) => {
+        console.log(name)
         const { name, value } = currentTarget;
+        if (name === 'date') {
+            console.log('toto date')
+        }
         setRow({ ...row, [name]: value });
     }
 
@@ -53,7 +63,8 @@ const AddCountdownRowPage = ({history, match}) => {
         <>
             <h1>Créer une entrée pour le contrat n° : {countdown}</h1>
             <form onSubmit={handleSubmit}>
-               <Field
+                <DatePicker locale="fr" dateFormat="dd/MM/yyyy" selected={row.date} value={row.date} error={errors.date} name="date" id="date" onChange={(value) => setRow({ ...row, date: value })}/>
+              {/*  <Field
                     name="date"
                     type="text"
                     placeholder="Date de la tâche"
@@ -61,7 +72,7 @@ const AddCountdownRowPage = ({history, match}) => {
                     onChange={handleChange}
                     value={row.date}
                     error={errors.date}
-                />
+                /> */}
                 <Field
                     name="task"
                     type="text"

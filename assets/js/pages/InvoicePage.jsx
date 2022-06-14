@@ -6,16 +6,24 @@ import Select from '../components/forms/Select';
 import FormContentLoader from '../components/loaders/FormContentLoader';
 import CustomersAPI from '../services/CustomersAPI';
 import InvoicesAPI from '../services/InvoicesAPI';
+import DatePicker from "react-datepicker";
+import { registerLocale, setDefaultLocale } from "react-datepicker";
+import fr from 'date-fns/locale/fr';
+import moment from 'moment';
 
 const InvoicePage = ({ history, match }) => { //On extrait history et match des props
 
     const { id = "new" } = match.params;
 
-    console.log(Date.now())
+    registerLocale('fr', fr)
+
     const [invoice, setInvoice] = useState({
         amount: '',
         customer: '',
-        status: 'SENT'
+        status: 'SENT',
+        year: '',
+        chrono: '',
+        paidAt: '',
     });
 
     const [customers, setCustomers] = useState([]);
@@ -27,7 +35,10 @@ const InvoicePage = ({ history, match }) => { //On extrait history et match des 
     const [errors, setErrors] = useState({
         amount: '',
         customer: '',
-        status: ''
+        status: '',
+        year: '',
+        chrono: '',
+        paidAt: '',
     });
 
     const [loading, setLoading] = useState(true);
@@ -65,8 +76,8 @@ const InvoicePage = ({ history, match }) => { //On extrait history et match des 
     const fetchInvoice = async (id) => {
         try {
 
-            const { amount, status, customer} = await InvoicesAPI.find(id);
-            setInvoice({ amount, status, customer: customer.id });
+            const { amount, status, customer, year, chrono, paidAt} = await InvoicesAPI.find(id);
+            setInvoice({ amount, status, customer: customer.id, year, chrono, paidAt});
             setLoading(false);
 
         } catch (error) {
@@ -155,7 +166,7 @@ const InvoicePage = ({ history, match }) => { //On extrait history et match des 
 
     return (
         <>
-            {!editing && <h1>Création d'une facture</h1> || <h1>Modification de la facture</h1>}
+            {!editing && <h1>Création d'une facture</h1> || <h1>Facture {invoice.year}{invoice.chrono} <Link to={'/pdf/invoice/' + match.params.id} className='btn btn-secondary ms-lg-auto'>PDF</Link></h1>}
             
             {loading && <FormContentLoader />}
             {!loading && <form onSubmit={handleSubmit}>
@@ -176,7 +187,7 @@ const InvoicePage = ({ history, match }) => { //On extrait history et match des 
                     value={invoice.customer}
                     error={errors.customer}
                 >
-                    {customers.map(customer => <option key={customer.id} value={customer.id}>{customer.firstName} {customer.lastName}</option>)}
+                    {customers.map(customer => <option key={customer.id} value={customer.id}>{customer.company}</option>)}
                 </Select>
 
                 <Select
@@ -189,7 +200,21 @@ const InvoicePage = ({ history, match }) => { //On extrait history et match des 
                     <option value="SENT">Envoyée</option>
                     <option value="PAID">Payée</option>
                     <option value="CANCELLED">Annulée</option>
-                </Select>               
+                </Select>
+
+                <label htmlFor="paidAt">Payée le </label>
+                <DatePicker 
+                    utcOffset={0} 
+                    locale="fr" 
+                    timeFormat="HH:mm"
+                    dateFormat="yyyy-MM-dd HH:mm" 
+                    /* selected={moment("2019-07-08").toDate()} */
+                    value={invoice.paidAt} 
+                    error={errors.paidAt} 
+                    name="paidAt" 
+                    id="paidAt" 
+                    onChange={(value) => setInvoice({ ...invoice, paidAt: value})}
+                />              
 
                 <div className="form-group mt-3">
                     <button type="submit" className='btn btn-success'>Enregistrer</button>
@@ -199,7 +224,6 @@ const InvoicePage = ({ history, match }) => { //On extrait history et match des 
 
             <div className='m-4 text-center'>
                 <Link to={'/invoiceRows/' + match.params.id + '/add'} className='btn btn-primary'>Créer une entrée</Link>&nbsp;
-                <Link to={'/pdf/invoice/' + match.params.id} className='btn btn-secondary'>Facture PDF</Link>&nbsp;
             </div>
             {rows.length >0 && <div>
             <h3 className="mt-5">Détails de la facture</h3>

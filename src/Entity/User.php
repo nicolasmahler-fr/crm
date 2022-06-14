@@ -88,6 +88,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="integer", nullable=true)
      * @Groups({"customers_read", "invoices_read", "invoices_subresource", "users_read"})
+     * @Assert\Type(type="numeric", message="Le code postal doit être numérique")
      */
     private $postcode;
 
@@ -300,12 +301,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getPostcode(): ?int
+    public function getPostcode(): ?string
     {
         return $this->postcode;
     }
 
-    public function setPostcode(?int $postcode): self
+    public function setPostcode(?string $postcode): self
     {
         $this->postcode = $postcode;
 

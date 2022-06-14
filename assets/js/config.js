@@ -1,4 +1,4 @@
-export const API_URL = "http://127.0.0.1:8000/api/";
+export const API_URL = "https://crm.nicolasmahler.wip/api/";
 
 export const CLIENTS_API = API_URL + "clients";
 export const CUSTOMERS_API = API_URL + "customers";

@@ -16,6 +16,7 @@ const Invoice = ({ id }) => {
 
     const [invoice, setInvoice] = useState({
       chrono: '',
+      year : '',
       amount: '',
       customer: '',
       sentAt: '',
@@ -28,8 +29,8 @@ const Invoice = ({ id }) => {
     //recup de la facture
     const fetchInvoice = async (id) => {
         try {
-            const {chrono, amount, customer, sentAt, user, invoiceRows} = await InvoicesAPI.find(id);
-          setInvoice({chrono, amount, customer, sentAt, user, invoiceRows});
+            const {chrono, year, amount, customer, sentAt, user, invoiceRows} = await InvoicesAPI.find(id);
+          setInvoice({chrono, year, amount, customer, sentAt, user, invoiceRows});
         } catch (error) {
             console.log(error.response);
             //history.replace('/invoices');
@@ -81,9 +82,9 @@ const Invoice = ({ id }) => {
         <Text style={Styles.clientName}>
         {invoice.customer.company}
         </Text>
-        <Text style={Styles.clientAddress}>
+        {/* <Text style={Styles.clientAddress}>
           {invoice.customer.firstName} {invoice.customer.lastName}
-        </Text>
+        </Text> */}
         <Text style={Styles.clientAddress}>
           {invoice.customer.address1}
         </Text>
@@ -111,7 +112,7 @@ const Invoice = ({ id }) => {
   const createInvoiceNumber = () => {
     return (
       <Text style={Styles.invoiceNumber}>
-        Facture - {invoice.chrono}
+        Facture - {invoice.year}{invoice.chrono}
       </Text>
     )
   }
@@ -247,8 +248,10 @@ const Invoice = ({ id }) => {
     return (
       <View>
         <Text style={contactOwnerStyle}>
-          {invoice.user.firstName} {invoice.user.lastName} - Développeur Web - {invoice.user.address1} {invoice.user.lastName} - {invoice.user.postCode} {invoice.user.city} - {invoice.user.email} - tel :(+33)07 81 71 87 55 - {invoice.user.website} 
-           - SIRET: {invoice.user.siret}
+          {invoice.user.firstName} {invoice.user.lastName} - Développeur Web - {invoice.user.address1} - {invoice.user.postcode} {invoice.user.city} - {invoice.user.email} - tel :(+33)07 81 71 87 55
+        </Text>
+        <Text style={contactOwnerStyle}>
+          {invoice.user.website} - SIRET: {invoice.user.siret}
         </Text>
       </View>
     )
