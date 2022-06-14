@@ -123,6 +123,19 @@ class Estimate
      */
     private $validateAt;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Groups({"estimates_read", "customers_read", "estimates_subresource"})
+     * @Assert\NotBlank(message="L'objet doit être renseigné")
+     */
+    private $object;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     * @Groups({"estimates_read", "customers_read", "estimates_subresource"})
+     */
+    private $definition;
+
     public function __construct()
     {
         $this->estimateRows = new ArrayCollection();
@@ -254,6 +267,30 @@ class Estimate
     public function setValidateAt(\DateTimeInterface $validateAt): self
     {
         $this->validateAt = $validateAt;
+
+        return $this;
+    }
+
+    public function getObject(): ?string
+    {
+        return $this->object;
+    }
+
+    public function setObject(string $object): self
+    {
+        $this->object = $object;
+
+        return $this;
+    }
+
+    public function getDefinition(): ?string
+    {
+        return $this->definition;
+    }
+
+    public function setDefinition(?string $definition): self
+    {
+        $this->definition = $definition;
 
         return $this;
     }

@@ -21,6 +21,8 @@ const Estimate = ({ id }) => {
       customer: '',
       sentAt: '',
       user: '',
+      object: '',
+      definition: '',
       estimateRows: []
     });
 
@@ -29,8 +31,8 @@ const Estimate = ({ id }) => {
     //recup du devis
     const fetchEstimate = async (id) => {
         try {
-            const {chrono, year, amount, customer, sentAt, user, estimateRows} = await EstimatesAPI.find(id);
-          setEstimate({chrono, year, amount, customer, sentAt, user, estimateRows});
+            const {chrono, year, amount, customer, sentAt, user, estimateRows, object, definition} = await EstimatesAPI.find(id);
+          setEstimate({chrono, year, amount, customer, sentAt, user, estimateRows, object, definition});
         } catch (error) {
             console.log(error.response);
         }
@@ -128,7 +130,7 @@ const Estimate = ({ id }) => {
         Devis - {estimate.year}{estimate.chrono}
       </Text>
       <Text style={Styles.estimateObject}>
-      Objet du devis
+      {estimate.object}
     </Text>
     </View>
     )
@@ -141,7 +143,7 @@ const Estimate = ({ id }) => {
         Définition de l'offre
       </Text>
       <Text style={Styles.estimateDef}>
-      lorem ipsum dolor sit amet
+      {estimate.definition}
     </Text>
     </View>
     )

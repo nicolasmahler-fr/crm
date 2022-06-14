@@ -130,7 +130,7 @@ const EstimatesPage = (props) => {
                         </Link>
                     </td>
                     <td>{formatDate(estimate.sentAt)}</td>
-                    <td>{formatDate(estimate.paidAt)}</td>
+                    <td>{formatDate(estimate.validateAt)}</td>
                     
                     <td className="text-center">
                         <span className={"badge badge-" + STATUS_CLASSES[estimate.status]}>

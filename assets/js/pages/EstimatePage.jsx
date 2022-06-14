@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Field from '../components/forms/Field';
+import Textarea from '../components/forms/Textarea';
 import Select from '../components/forms/Select';
 import FormContentLoader from '../components/loaders/FormContentLoader';
 import CustomersAPI from '../services/CustomersAPI';
@@ -24,6 +25,8 @@ const EstimatePage = ({ history, match }) => { //On extrait history et match des
         year: '',
         chrono: '',
         validateAt: '',
+        object: '',
+        definition: ''
     });
 
     const [customers, setCustomers] = useState([]);
@@ -39,6 +42,8 @@ const EstimatePage = ({ history, match }) => { //On extrait history et match des
         year: '',
         chrono: '',
         validateAt: '',
+        object: '',
+        definition: ''
     });
 
     const [loading, setLoading] = useState(true);
@@ -75,8 +80,8 @@ const EstimatePage = ({ history, match }) => { //On extrait history et match des
     const fetchEstimate = async (id) => {
         try {
 
-            const { amount, status, customer, year, chrono, validateAt} = await EstimatesAPI.find(id);
-            setEstimate({ amount, status, customer: customer.id, year, chrono, validateAt});
+            const { amount, status, customer, year, chrono, validateAt, object, definition} = await EstimatesAPI.find(id);
+            setEstimate({ amount, status, customer: customer.id, year, chrono, validateAt, object, definition});
             setLoading(false);
 
         } catch (error) {
@@ -172,7 +177,7 @@ const EstimatePage = ({ history, match }) => { //On extrait history et match des
                 <Field
                     name="amount"
                     type="number"
-                    placeholder="Montant de la facture"
+                    placeholder="Montant du devis"
                     label="montant"
                     onChange={handleChange}
                     value={estimate.amount}
@@ -201,6 +206,25 @@ const EstimatePage = ({ history, match }) => { //On extrait history et match des
                     <option value="VALIDATE">Validé</option>
                     <option value="CANCELLED">Annulée</option>
                 </Select>
+
+                <Field
+                    name="object"
+                    type="text"
+                    placeholder="Objet du devis"
+                    label="objet"
+                    onChange={handleChange}
+                    value={estimate.object}
+                    error={errors.object}
+                />
+
+                <Textarea
+                    name="definition"
+                    placeholder="Définition du devis"
+                    label="Définition"
+                    onChange={handleChange}
+                    value={estimate.definition}
+                    error={errors.definition}
+                />
 
                 <label htmlFor="validateAt">Payé le </label>
                 <DatePicker 
