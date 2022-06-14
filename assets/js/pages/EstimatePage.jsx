@@ -20,7 +20,7 @@ const EstimatePage = ({ history, match }) => { //On extrait history et match des
     const [estimate, setEstimate] = useState({
         amount: '',
         customer: '',
-        status: 'SENT',
+        status: 'DRAFT',
         year: '',
         chrono: '',
         validateAt: '',
@@ -196,6 +196,7 @@ const EstimatePage = ({ history, match }) => { //On extrait history et match des
                     value={estimate.status}
                     error={errors.status}
                 >
+                    <option value="DRAFT">Brouillon</option>
                     <option value="SENT">Envoyé</option>
                     <option value="VALIDATE">Validé</option>
                     <option value="CANCELLED">Annulée</option>

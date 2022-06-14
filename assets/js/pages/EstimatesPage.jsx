@@ -9,13 +9,15 @@ import EstimatesAPI from '../services/EstimatesAPI';
 const STATUS_CLASSES = {
     VALIDATE: "primary",
     SENT: "info",
-    CANCELLED: "danger"
+    CANCELLED: "danger",
+    DRAFT: "secondary"
 };
 
 const STATUS_LABELS = {
     SENT: "Envoyé",
     VALIDATE: "Validé",
-    CANCELLED: "Annulé"
+    CANCELLED: "Annulé",
+    DRAFT: "Brouillon"
 };
 
 const EstimatesPage = (props) => {

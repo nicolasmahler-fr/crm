@@ -83,7 +83,7 @@ class Estimate
      * @ORM\Column(type="string", length=255)
      * @Groups({"estimates_read", "customers_read", "estimates_subresource"})
      * @Assert\NotBlank(message="Le status doit être renseignée")
-     * @Assert\Choice(choices={"SENT", "VALIDATE", "CANCELLED"}, message="Le status doit être SENT, VALIDATE ou CANCELLED")
+     * @Assert\Choice(choices={"SENT", "VALIDATE", "CANCELLED", "DRAFT"}, message="Le status doit être SENT, VALIDATE ou CANCELLED")
      */
     private $status;
 
