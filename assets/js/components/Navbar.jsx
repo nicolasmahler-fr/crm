@@ -32,11 +32,14 @@ const Navbar = ({ history }) => {
           <NavLink className="nav-link" to="/customers">Clients</NavLink>
         </li>
         <li className="nav-item">
+          <NavLink className="nav-link" to="/estimates">Devis</NavLink>
+        </li>
+        <li className="nav-item">
           <NavLink className="nav-link" to="/invoices">Factures</NavLink>
         </li>
         <li className="nav-item">
           <NavLink className="nav-link" to="/countdowns">Contrats de maintenance</NavLink>
-            </li>
+        </li>
       </ul>
           <ul className="navbar-nav mll-auto">
             {!isAuthenticated && <>

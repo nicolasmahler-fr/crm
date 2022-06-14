@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import InvoicesAPI from '../../services/InvoicesAPI';
+import EstimatesAPI from '../../services/EstimatesAPI';
 import { Page, View, Text, Document, StyleSheet, Font, Image } from '@react-pdf/renderer';
 import logoPath from '../../../img/logo-nm.png';
 import Roboto from "../../../../assets/fonts/Roboto/Roboto-Regular.ttf";
@@ -12,56 +12,52 @@ import Moment from 'moment';
 * https://github.com/Chagall/react-pdf-table-example
 */
 
-const Invoice = ({ id }) => {
+const Estimate = ({ id }) => {
 
-    const [invoice, setInvoice] = useState({
+    const [estimate, setEstimate] = useState({
       chrono: '',
       year : '',
       amount: '',
       customer: '',
       sentAt: '',
       user: '',
-      invoiceRows: []
+      estimateRows: []
     });
 
   const [rows, setRows] = useState([]);
   
-    //recup de la facture
-    const fetchInvoice = async (id) => {
+    //recup du devis
+    const fetchEstimate = async (id) => {
         try {
-            const {chrono, year, amount, customer, sentAt, user, invoiceRows} = await InvoicesAPI.find(id);
-          setInvoice({chrono, year, amount, customer, sentAt, user, invoiceRows});
+            const {chrono, year, amount, customer, sentAt, user, estimateRows} = await EstimatesAPI.find(id);
+          setEstimate({chrono, year, amount, customer, sentAt, user, estimateRows});
         } catch (error) {
             console.log(error.response);
-            //history.replace('/invoices');
         }
     }
     
   //DEPRECATED
     //recup des entrées de la facture
-   const fetchInvoiceRows = async () => {
+   const fetchestimateRows = async () => {
         try {
-            const data = await InvoicesAPI.findAllRows(id);
+            const data = await EstimatesAPI.findAllRows(id);
             setRows(data);
             setLoading(false);
 
-            //if (!invoice.customer) setInvoice({ ...invoice, customer: data[0].id });
         } catch (error) {
             console.log(error.response)
-           // toast.error('Impossible de charger les détails de la facture.');
-           // history.replace('/invoices');
         }
     }
 
 
      useEffect(() => {
-       fetchInvoice(id);
+       fetchEstimate(id);
 
      }, []);
     
      //DEPRECATED
     useEffect(() => {
-        fetchInvoiceRows();
+        fetchestimateRows();
     }, []);
  
   const formatDate = (str) => Moment(str).format('DD/MM/YYYY');
@@ -80,22 +76,38 @@ const Invoice = ({ id }) => {
     return (
       <View>
         <Text style={Styles.clientName}>
-        {invoice.customer.company}
+        {estimate.customer.company}
         </Text>
         {/* <Text style={Styles.clientAddress}>
-          {invoice.customer.firstName} {invoice.customer.lastName}
+          {estimate.customer.firstName} {estimate.customer.lastName}
         </Text> */}
         <Text style={Styles.clientAddress}>
-          {invoice.customer.address1}
+          {estimate.customer.address1}
         </Text>
         <Text style={Styles.clientAddress}>
-          {invoice.customer.address2}
+          {estimate.customer.address2}
         </Text>
         <Text style={Styles.clientAddress}>
-          {invoice.customer.postcode} {invoice.customer.city}
+          {estimate.customer.postcode} {estimate.customer.city}
         </Text>
         <Text style={Styles.clientAddress}>
-          {invoice.customer.country}
+          {estimate.customer.country}
+        </Text>
+      </View>
+    )
+  }
+
+  const createUserAddress = () => {
+    return (
+      <View>
+        <Text style={Styles.userName}>
+          {estimate.user.firstName} {estimate.user.lastName}
+        </Text>
+        <Text style={Styles.userAddress}>
+          Développeur Web
+        </Text>
+        <Text style={Styles.userAddress}>
+         Tel : 07 81 71 87 55 - {estimate.user.email}
         </Text>
       </View>
     )
@@ -104,16 +116,34 @@ const Invoice = ({ id }) => {
   const createSendDate = () => {
     return (
       <Text style={Styles.date}>
-        {invoice.user.city}, le {formatDate(invoice.sentAt)}
+        {estimate.user.city}, le {formatDate(estimate.sentAt)}
       </Text>
     )
   }
 
-  const createInvoiceNumber = () => {
+  const createEstimateNumber = () => {
     return (
-      <Text style={Styles.invoiceNumber}>
-        Facture - {invoice.year}{invoice.chrono}
+      <View>
+      <Text style={Styles.estimateNumber}>
+        Devis - {estimate.year}{estimate.chrono}
       </Text>
+      <Text style={Styles.estimateObject}>
+      Objet du devis
+    </Text>
+    </View>
+    )
+  }
+
+  const createEstimateDef = () => {
+    return (
+      <View>
+      <Text style={Styles.estimateDefTitle}>
+        Définition de l'offre
+      </Text>
+      <Text style={Styles.estimateDef}>
+      lorem ipsum dolor sit amet
+    </Text>
+    </View>
     )
   }
 
@@ -123,8 +153,6 @@ const Invoice = ({ id }) => {
 
         <View style={firstTableColHeaderStyle}>
           <Text style={tableCellHeaderStyle}></Text>
-
-          
         </View>
 
         <View style={tableColHeaderStyle}>
@@ -147,7 +175,7 @@ const Invoice = ({ id }) => {
 
     return (<>
 
-      {invoice.invoiceRows.map(row => <View style={tableRowStyle} key={row.id}>
+      {estimate.estimateRows.map(row => <View style={tableRowStyle} key={row.id}>
         <View style={firstTableColStyle}>
           <Text style={firstTableCellStyle}>{row.description}</Text>
         </View>
@@ -167,26 +195,6 @@ const Invoice = ({ id }) => {
         )}
     </>)
 
-    //DEPRECATED 
-     /*  {rows.map(row => <View style={tableRowStyle} key={row.id}>
-        <View style={firstTableColStyle}>
-          <Text style={firstTableCellStyle}>{row.description}</Text>
-        </View>
-
-        <View style={tableColStyle}>
-          <Text style={tableCellStyle}>{row.unitPrice}</Text>
-        </View>
-
-        <View style={tableColStyle}>
-          <Text style={tableCellStyle}>{row.quantity}</Text>
-        </View>
-
-        <View style={tableColStyle}>
-          <Text style={tableCellStyle}>{row.amount}</Text>
-        </View>
-      </View>
-        )}
-      </>) */
      
   };
 
@@ -204,54 +212,56 @@ const Invoice = ({ id }) => {
         </View>
 
         <View style={tableColFooterStyle}>
-          <Text style={tableCellFooterStyle}>{invoice.amount} €</Text>
+          <Text style={tableCellFooterStyle}>{estimate.amount} €</Text>
         </View>
 
       </View>
     );
   };
 
-
-  const createOwnerAccount = () => {
-    return (
-      <View style={accountInfoStyle}>
-        <Text style={regularTxtStyle} >
-          Facture à régler à réception.
-          Paiement par chèque, ou virement bancaire sur le compte :
+  const signature = () =>{
+    return(
+      <View style={signatureStyle}>
+        <Text style={signatureTitre}>
+          Signature précédée de la mention "bon pour accord"
         </Text>
-        <Text style={boldCenteredTxtStyle}>
-          {invoice.user.firstName} {invoice.user.lastName}
-        </Text>
-        <Text style={boldCenteredTxtStyle}>
-          {invoice.user.address1}
-        </Text>
-        <Text style={boldCenteredTxtStyle}>
-          {invoice.user.postCode} {invoice.user.city}
-        </Text>
-        <Text style={boldCenteredTxtStyle}>
-          {invoice.user.country}
-        </Text>
-        <Text style={boldCenteredTxtStyle}>
-          RIB : {invoice.user.rib}
-        </Text>
-        <Text style={boldCenteredTxtStyle}>
-          IBAN : FR76 1027 8016 5000 0204 5320 225
-        </Text>
-        <Text style={boldCenteredTxtStyle}>
-          BIC : {invoice.user.bic}
+        <Text style={signatureBloc}>
+          &nbsp;
         </Text>
       </View>
-    )
-  }
+    );
+  };
+
+  const cgv = () => {
+    return (
+      <View style={cgvStyle}>
+        <Text style={cgvStyleTxt} >
+          Ce devis est valable 1 mois à compter de la date d’émission. La facture correspondante sera payable sous 30 jours.
+        </Text>
+        <Text style={cgvStyleTxt} >
+        Le présent devis prévoit l’intégralité des prestations que le prestataire s’engage à réaliser pour le Client.
+        </Text>
+        <Text style={cgvStyleTxt} >
+        Toute prestation supplémentaire demandée par le Client donnera lieu à l’émission d’un nouveau devis ou avenant. Le présent devis est valable
+        durant 30 jours à compter de sa date d’émission. Une fois validé par le Client, le présent devis a valeur de contrat. Dans l’hypothèse d’une rupture
+        de contrat à l’initiative du Client, ce dernier s’engage à régler les prestations
+        réalisées.
+        </Text>
+        <Text style={cgvStyleTxt} >
+        En conformité de l’article L 441-6 du Code de commerce : La facture correspondante sera payable sous 30 jours.
+        </Text>
+      </View>
+    );
+  };
 
   const createOwnerContact = () => {
     return (
       <View>
         <Text style={contactOwnerStyle}>
-          {invoice.user.firstName} {invoice.user.lastName} - Développeur Web - {invoice.user.address1} - {invoice.user.postcode} {invoice.user.city} - {invoice.user.email} - tel :(+33)07 81 71 87 55
+          {estimate.user.firstName} {estimate.user.lastName} - Développeur Web - {estimate.user.address1} - {estimate.user.postcode} {estimate.user.city} - {estimate.user.email} - tel :(+33)07 81 71 87 55
         </Text>
         <Text style={contactOwnerStyle}>
-          {invoice.user.website} - SIRET: {invoice.user.siret}
+          {estimate.user.website} - SIRET: {estimate.user.siret}
         </Text>
       </View>
     )
@@ -279,8 +289,10 @@ const Invoice = ({ id }) => {
         <View style=''>
           {createHeaderLogo()}
           {createClientAddress()}
+          {createUserAddress()}
           {createSendDate()}
-          {createInvoiceNumber()}
+          {createEstimateNumber()}
+          {createEstimateDef()}
         </View>
 
         <View style={tableStyle}>
@@ -290,7 +302,11 @@ const Invoice = ({ id }) => {
         </View>
 
         <View>
-          {createOwnerAccount()}
+          {signature()}
+        </View>
+
+        <View>
+          {cgv()}
         </View>
 
         <View style={footerStyle} fixed>
@@ -369,18 +385,51 @@ const Styles = StyleSheet.create({
     textAlign: 'right'
   },
 
+  userName: {
+    textAlign: 'left',
+    fontWeight: 'bold',
+    fontSize: '8px'
+  },
+
+  userAddress: {
+    textAlign: 'left',
+    fontSize: '8px'
+  },
+
   date: {
     marginTop: 20,
+    fontSize: '8px',
     fontStyle: 'italic'
   },
 
-  invoiceNumber: {
+  estimateNumber: {
     marginTop: 20,
-    marginBottom: 20,
     fontSize: '12px',
     fontWeight: 'bold',
     fontFamily: 'Roboto',
     color: '#FF5335'
+  },
+
+  estimateObject: {
+    marginBottom: 20,
+    fontSize: '10px',
+    fontWeight: 'bold',
+    fontFamily: 'Roboto',
+    color: '#000000'
+  },
+
+  estimateDefTitle: {
+    fontSize: '8px',
+    fontWeight: 'bold',
+    fontFamily: 'Roboto',
+    color: '#333333'
+  },
+
+  estimateDef: {
+    marginBottom: 20,
+    fontSize: '8px',
+    fontFamily: 'Roboto',
+    color: '#333333'
   },
 
   pageNumber: {
@@ -546,6 +595,50 @@ const boldCenteredTxtStyle = {
 
 /*
 *
+* Signature
+*
+*/
+const signatureStyle = {
+  marginTop: 40,
+  textAlign: 'left'
+}
+
+const signatureTitre = {
+  fontSize: 8,
+  marginBottom: 5,
+  color: '#000000',
+  fontStyle: 'italic'
+}
+
+const signatureBloc = {
+  width: "40%",
+  borderStyle: "none",
+  borderColor: "transparent",
+  borderBottomColor: "transparent",
+  borderWidth: 0,
+  borderTopWidth: 0,
+  backgroundColor: '#e4e4e4',
+  paddingTop: 60
+}
+
+/*
+*
+* CGV
+*
+*/
+const cgvStyle = {
+  marginTop: 40,
+  textAlign: 'left'
+}
+
+const cgvStyleTxt = {
+  fontSize: 7,
+  marginBottom: 5,
+  color: '#666666'
+}
+
+/*
+*
 * FOOTER
 *
 */
@@ -563,4 +656,4 @@ const contactOwnerStyle = {
 
 
 
-export default Invoice
+export default Estimate

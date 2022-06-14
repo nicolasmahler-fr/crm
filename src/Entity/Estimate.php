@@ -83,7 +83,7 @@ class Estimate
      * @ORM\Column(type="string", length=255)
      * @Groups({"estimates_read", "customers_read", "estimates_subresource"})
      * @Assert\NotBlank(message="Le status doit être renseignée")
-     * @Assert\Choice(choices={"PENDING", "VALIDATE", "CANCELLED"}, message="Le status doit être SENT, PAID ou CANCELLED")
+     * @Assert\Choice(choices={"SENT", "VALIDATE", "CANCELLED"}, message="Le status doit être SENT, VALIDATE ou CANCELLED")
      */
     private $status;
 
@@ -116,6 +116,13 @@ class Estimate
      */
     private $estimateRows;
 
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     * @Groups({"estimates_read", "customers_read", "estimates_subresource"})
+     * @Assert\Type(type="\DateTimeInterface", message="La date doit être au format YYYY-MM-DD")
+     */
+    private $validateAt;
+
     public function __construct()
     {
         $this->estimateRows = new ArrayCollection();
@@ -123,7 +130,7 @@ class Estimate
 
     /**
      * Permet de récupérer le user à qui appartient la facture
-     * @Groups({"invoices_read", "invoices_subresource"})
+     * @Groups({"estimates_read", "estimates_subresource"})
      * @return User
      */
     public function getUser(): User
@@ -189,7 +196,7 @@ class Estimate
         return $this->chrono;
     }
 
-    public function setChrono(int $chrono): self
+    public function setChrono($chrono): self
     {
         $this->chrono = $chrono;
 
@@ -235,6 +242,18 @@ class Estimate
                 $estimateRow->setEstimate(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getValidateAt(): ?\DateTimeInterface
+    {
+        return $this->validateAt;
+    }
+
+    public function setValidateAt(\DateTimeInterface $validateAt): self
+    {
+        $this->validateAt = $validateAt;
 
         return $this;
     }

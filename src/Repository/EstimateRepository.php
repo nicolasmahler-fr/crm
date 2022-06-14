@@ -2,9 +2,10 @@
 
 namespace App\Repository;
 
+use App\Entity\User;
 use App\Entity\Estimate;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @method Estimate|null find($id, $lockMode = null, $lockVersion = null)
@@ -17,6 +18,19 @@ class EstimateRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Estimate::class);
+    }
+
+    public function findNextChrono(User $user)
+    {
+        return $this->createQueryBuilder('e')
+            ->select('e.chrono')
+            ->join('e.customer', 'c')
+            ->where('c.user = :user')
+            ->setParameter('user', $user)
+            ->orderBy('e.chrono', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getSingleScalarResult() + 1;
     }
 
     // /**

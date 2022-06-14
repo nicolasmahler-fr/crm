@@ -57,6 +57,8 @@ security:
         - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/invoices, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/api/invoice_rows, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/api/estimates, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/api/estimate_rows, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/api/customers, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/api/countdowns, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/api/countdown_rows, roles: IS_AUTHENTICATED_FULLY }

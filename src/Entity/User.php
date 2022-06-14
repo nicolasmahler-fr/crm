@@ -26,13 +26,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"customers_read", "invoices_read", "invoices_subresource", "users_read"})
+     * @Groups({"customers_read", "invoices_read", "invoices_subresource", "estimates_read", "estimates_subresource", "users_read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
-     * @Groups({"customers_read", "invoices_read", "invoices_subresource", "users_read"})
+     * @Groups({"customers_read", "invoices_read", "invoices_subresource", "estimates_read", "estimates_subresource", "users_read"})
      * @Assert\NotBlank(message="L'email doit être renseigné")
      * @Assert\Email(message="Le format de l'email n'est pas correct")
      */
@@ -52,7 +52,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"customers_read", "invoices_read", "invoices_subresource", "users_read"})
+     * @Groups({"customers_read", "invoices_read", "invoices_subresource", "estimates_read", "estimates_subresource", "users_read"})
      * @Assert\NotBlank(message="Le prénom est obligatoire")
      * @Assert\Length(min=3, minMessage="Le prénom doit comporter 3 caractères minimum")
      * @Assert\Length(max=255, maxMessage="Le prénom doit comporter 255 caractères maximum")
@@ -61,7 +61,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"customers_read", "invoices_read", "invoices_subresource", "users_read"})
+     * @Groups({"customers_read", "invoices_read", "invoices_subresource", "estimates_read", "estimates_subresource", "users_read"})
      * @Assert\NotBlank(message="Le nom de famille est obligatoire")
      * @Assert\Length(min=3, minMessage="Le nom de famille doit comporter 3 caractères minimum")
      * @Assert\Length(max=255, maxMessage="Le nom de famille doit comporter 255 caractères maximum")
@@ -75,56 +75,56 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"customers_read", "invoices_read", "invoices_subresource", "users_read"})
+     * @Groups({"customers_read", "invoices_read", "invoices_subresource", "estimates_read", "estimates_subresource", "users_read"})
      */
     private $address1;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"customers_read", "invoices_read", "invoices_subresource", "users_read"})
+     * @Groups({"customers_read", "invoices_read", "invoices_subresource", "estimates_read", "estimates_subresource", "users_read"})
      */
     private $address2;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * @Groups({"customers_read", "invoices_read", "invoices_subresource", "users_read"})
+     * @Groups({"customers_read", "invoices_read", "invoices_subresource", "estimates_read", "estimates_subresource", "users_read"})
      * @Assert\Type(type="numeric", message="Le code postal doit être numérique")
      */
     private $postcode;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"customers_read", "invoices_read", "invoices_subresource", "users_read"})
+     * @Groups({"customers_read", "invoices_read", "invoices_subresource", "estimates_read", "estimates_subresource", "users_read"})
      */
     private $city;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"customers_read", "invoices_read", "invoices_subresource", "users_read"})
+     * @Groups({"customers_read", "invoices_read", "invoices_subresource", "estimates_read", "estimates_subresource", "users_read"})
      */
     private $country;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"customers_read", "invoices_read", "invoices_subresource", "users_read"})
+     * @Groups({"customers_read", "invoices_read", "invoices_subresource", "estimates_read", "estimates_subresource", "users_read"})
      */
     private $website;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"customers_read", "invoices_read", "invoices_subresource", "users_read"})
+     * @Groups({"customers_read", "invoices_read", "invoices_subresource", "estimates_read", "estimates_subresource", "users_read"})
      */
     private $siret;
 
     /**
      * @ORM\Column(type="bigint")
-     * @Groups({"customers_read", "invoices_read", "invoices_subresource", "users_read"})
+     * @Groups({"customers_read", "invoices_read", "invoices_subresource", "estimates_read", "estimates_subresource", "users_read"})
      */
     private $rib;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"customers_read", "invoices_read", "invoices_subresource", "users_read"})
+     * @Groups({"customers_read", "invoices_read", "invoices_subresource", "estimates_read", "estimates_subresource", "users_read"})
      */
     private $bic;
 

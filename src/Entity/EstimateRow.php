@@ -45,13 +45,14 @@ class EstimateRow
     /**
      * @ORM\Column(type="text", nullable=true)
      * @Groups({"estimateRows_read", "estimates_read", "estimates_subresource", "estimateRows_subresource"})
-     * @Assert\NotBlank(message="La quantité est obligatoire")
-     * @Assert\Type(type="numeric", message="La quantité doit être numérique")
      */
     private $description;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"estimateRows_read", "estimates_read", "estimates_subresource", "estimateRows_subresource"})
+     * @Assert\NotBlank(message="La quantité est obligatoire")
+     * @Assert\Type(type="numeric", message="La quantité doit être numérique")
      */
     private $quantity;
 
@@ -64,6 +65,7 @@ class EstimateRow
     private $amount;
 
     /**
+     * @Groups({"estimateRows_read"})
      * @ORM\ManyToOne(targetEntity=Estimate::class, inversedBy="estimateRows")
      * @ORM\JoinColumn(nullable=false)
      */
