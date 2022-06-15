@@ -11,3 +11,8 @@ body {
     background : #32fbe2;
     color: #170229;
 }
+
+.badge-secondary{
+    background : #f1c40f;
+    color: #170229;
+}

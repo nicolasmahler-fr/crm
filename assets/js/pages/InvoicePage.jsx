@@ -20,7 +20,7 @@ const InvoicePage = ({ history, match }) => { //On extrait history et match des 
     const [invoice, setInvoice] = useState({
         amount: '',
         customer: '',
-        status: 'SENT',
+        status: 'DRAFT',
         year: '',
         chrono: '',
         paidAt: '',
@@ -197,6 +197,7 @@ const InvoicePage = ({ history, match }) => { //On extrait history et match des 
                     value={invoice.status}
                     error={errors.status}
                 >
+                    <option value="DRAFT">Brouillon</option>
                     <option value="SENT">Envoyée</option>
                     <option value="PAID">Payée</option>
                     <option value="CANCELLED">Annulée</option>

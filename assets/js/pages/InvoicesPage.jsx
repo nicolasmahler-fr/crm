@@ -7,12 +7,14 @@ import Pagination from '../components/Pagination';
 import InvoicesAPI from '../services/InvoicesAPI';
 
 const STATUS_CLASSES = {
+    DRAFT: "secondary",
     PAID: "primary",
     SENT: "info",
     CANCELLED: "danger"
 };
 
 const STATUS_LABELS = {
+    DRAFT: "Brouillon",
     SENT: "Envoyée",
     PAID: "Payée",
     CANCELLED: "Annulée"

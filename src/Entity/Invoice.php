@@ -83,7 +83,7 @@ class Invoice
      * @ORM\Column(type="string", length=255)
      * @Groups({"invoices_read", "customers_read", "invoices_subresource"})
      * @Assert\NotBlank(message="Le status doit être renseignée")
-     * @Assert\Choice(choices={"SENT", "PAID", "CANCELLED"}, message="Le status doit être SENT, PAID ou CANCELLED")
+     * @Assert\Choice(choices={"DRAFT", "SENT", "PAID", "CANCELLED"}, message="Le status doit être DRAFT, SENT, PAID ou CANCELLED")
      */
     private $status;
 
