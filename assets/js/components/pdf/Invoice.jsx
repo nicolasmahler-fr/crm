@@ -232,7 +232,7 @@ const Invoice = ({ id }) => {
           {invoice.user.country}
         </Text>
         <Text style={boldCenteredTxtStyle}>
-          RIB : {invoice.user.rib}
+          RIB : 10278 01650 00020453202 25
         </Text>
         <Text style={boldCenteredTxtStyle}>
           IBAN : FR76 1027 8016 5000 0204 5320 225
