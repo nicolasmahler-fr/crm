@@ -24,12 +24,12 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
  *      }
  * },
  * itemOperations={
- *      "GET", 
- *      "PUT", 
- *      "DELETE", 
+ *      "GET",
+ *      "PUT",
+ *      "DELETE",
  *      "increment"={
- *          "method"="post", 
- *          "path"="/invoices/{id}/increment", 
+ *          "method"="post",
+ *          "path"="/invoices/{id}/increment",
  *          "controller"="App\Controller\InvoiceIncrementationController",
  *          "openapi_context"={
  *              "summary"="Incrémente une facture",
@@ -122,6 +122,13 @@ class Invoice
      * @Assert\Type(type="\DateTimeInterface", message="La date doit être au format YYYY-MM-DD")
      */
     private $paidAt;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     * @Groups({"invoices_read", "customers_read", "invoices_subresource", "invoiceRows_read"})
+     * @Assert\Type(type="integer", message="La TVA doit être un booléen")
+     */
+    private $vat;
 
     public function __construct()
     {
@@ -254,6 +261,18 @@ class Invoice
     public function setPaidAt(\DateTimeInterface $paidAt): self
     {
         $this->paidAt = $paidAt;
+
+        return $this;
+    }
+
+    public function getVat(): ?int
+    {
+        return $this->vat;
+    }
+
+    public function setVat(?int $vat): self
+    {
+        $this->vat = $vat;
 
         return $this;
     }

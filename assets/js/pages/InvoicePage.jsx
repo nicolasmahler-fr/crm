@@ -19,7 +19,7 @@ const InvoicePage = ({ history, match }) => {
   registerLocale("fr", fr);
 
   const [invoice, setInvoice] = useState({
-    vat: 1,
+    vat: 0,
     amount: "",
     customer: "",
     status: "DRAFT",
@@ -78,9 +78,10 @@ const InvoicePage = ({ history, match }) => {
   //recup d'une facture
   const fetchInvoice = async (id) => {
     try {
-      const { amount, status, customer, year, chrono, paidAt } =
+      const { vat, amount, status, customer, year, chrono, paidAt } =
         await InvoicesAPI.find(id);
       setInvoice({
+        vat,
         amount,
         status,
         customer: customer.id,

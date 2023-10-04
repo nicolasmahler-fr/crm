@@ -24,12 +24,12 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
  *      }
  * },
  * itemOperations={
- *      "GET", 
- *      "PUT", 
- *      "DELETE", 
+ *      "GET",
+ *      "PUT",
+ *      "DELETE",
  *      "increment"={
- *          "method"="post", 
- *          "path"="/estimates/{id}/increment", 
+ *          "method"="post",
+ *          "path"="/estimates/{id}/increment",
  *          "controller"="App\Controller\EstimateIncrementationController",
  *          "openapi_context"={
  *              "summary"="Incrémente un devis",
