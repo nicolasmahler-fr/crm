@@ -28,9 +28,7 @@ APP_SECRET=f08aaa50a481043bd090f99a17450a27
 # 
 # DATABASE_URL="sqlite:///%kernel.project_dir%/var/data.db"
 # DATABASE_URL="mysql://db_user:db_password@127.0.0.1:3306/db_name?serverVersion=5.7"
-#DATABASE_URL='mysql://root:Password123%23@!@127.0.0.1:3306/crm'
-
-DATABASE_URL='mysql://root:@127.0.0.1:3306/crm?serverVersion=5.7'
+DATABASE_URL='mysql://root:@localhost:3306/crm?serverVersion=5.7'
 # ##< doctrine/doctrine-bundle ###
 
 # ##> nelmio/cors-bundle ###
