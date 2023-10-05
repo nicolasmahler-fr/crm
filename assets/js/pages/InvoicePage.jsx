@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import Field from "../components/forms/Field";
+import DisabledField from "../components/forms/DisabledField";
 import Select from "../components/forms/Select";
 import FormContentLoader from "../components/loaders/FormContentLoader";
 import CustomersAPI from "../services/CustomersAPI";
@@ -115,6 +116,12 @@ const InvoicePage = ({ history, match }) => {
     }
   }, [id]);
 
+  //Calcul TVA
+  const getTotalAmountVatInc = () => {
+    return invoice.amount * 1.2;
+    //console.log(amount);
+  };
+
   // Gestion des changements des inputs dans le form
   const handleChange = ({ currentTarget }) => {
     const { name, value } = currentTarget;
@@ -202,12 +209,25 @@ const InvoicePage = ({ history, match }) => {
           <Field
             name="amount"
             type="number"
-            placeholder="Montant de la facture"
-            label="montant"
+            placeholder="Montant de la facture HT"
+            label="montant HT"
             onChange={handleChange}
             value={invoice.amount}
             error={errors.amount}
           />
+
+          {invoice.vat == 1 && (
+            <DisabledField
+              name="amountvat"
+              type="number"
+              placeholder="Montant de la facture TTC "
+              label="montant TTC (TVA 20%)"
+              readOnly={true}
+              onChange={handleChange}
+              value={getTotalAmountVatInc()}
+              // error={errors.amount}
+            />
+          )}
 
           <Select
             name="customer"

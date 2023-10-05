@@ -20,7 +20,6 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class InvoiceAmountSubscriber implements EventSubscriberInterface
 {
-
     private $rowRepo;
     private $invoiceRepo;
     private $entityManager;

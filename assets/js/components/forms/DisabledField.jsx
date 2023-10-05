@@ -18,6 +18,7 @@ const field = ({
       placeholder={placeholder || label}
       name={name}
       id={name}
+      disabled
       className={"form-control" + (error && " is-invalid")}
     />
     {error && <p className="">{error}</p>}
